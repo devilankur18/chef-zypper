@@ -30,7 +30,10 @@ define :zypper_repository do
 
   execute "zypper repo #{name}" do
     command "zypper ar #{url} #{name}"
-    not_if "zypper lr #{name}"
+    only_if {
+      `zypper lr #{name} 2>&1 | grep 'not found'`
+      $? == 0
+    }
     notifies :run, "execute[update zypper for #{name}]", :immediately
   end
 end
