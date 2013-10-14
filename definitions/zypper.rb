@@ -29,7 +29,7 @@ define :zypper_repository do
   end
 
   execute "zypper repo #{name}" do
-    command "zypper ar #{url} #{name}"
+    command "zypper ar -G #{url} #{name}"
     only_if {
       `zypper lr #{name} 2>&1 | grep 'not found'`
       $? == 0
